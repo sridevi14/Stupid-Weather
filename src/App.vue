@@ -1,47 +1,35 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap"
+import Search from './components/Search.vue';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <main class="main flex-wrap">
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+    <Search/>
 
-  <main>
-    <TheWelcome />
+
   </main>
+
+
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
+.main{
+  background: rgb(255,255,255);
+/* background: linear-gradient( rgba(255,255,255,1) 0%, rgba(8,8,8,1) 100%); */
+background: linear-gradient(to bottom, rgba(8,8,8,1) 0%, rgb(223, 217, 217) 100%);
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+min-height: 100vh;
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+ display: flex;
+   align-items: center;
+  justify-content: center;
 }
 </style>
