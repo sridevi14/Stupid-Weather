@@ -2,26 +2,32 @@
   <div class="weather_desc_box" v-if="isweather">
     <div class="weather_desc">
       <div class="weather_desc_innerdiv">
-        <h2>
-          Sunrise:<span style="font-weight: 100">{{ sunrise }}</span>
-        </h2>
-        <h2>
-          Real feel:<span style="font-weight: 100">{{ feels_like }}</span>
-        </h2>
-        <h2>
-          Pressure:<span style="font-weight: 100">{{ pressure }}hpa</span>
-        </h2>
+        <div>
+          <p>Sunrise</p>
+          <p style="font-weight: bold">{{ sunrise }}</p>
+        </div>
+        <div>
+          <p>Real feel</p>
+          <p style="font-weight: bold">{{ feels_like }}</p>
+        </div>
+        <div>
+          <p>Pressure</p>
+          <p style="font-weight: bold">{{ pressure }}hpa</p>
+        </div>
       </div>
       <div class="weather_desc_innerdiv">
-        <h2>
-          Sunset:<span style="font-weight: 100">{{ sunset }}</span>
-        </h2>
-        <h2>
-          Humidity:<span style="font-weight: 100">{{ humidity }}%</span>
-        </h2>
-        <h2>
-          Wind speed:<span style="font-weight: 100">{{ wind_Speed }}m/s</span>
-        </h2>
+        <div>
+          <p>Sunset</p>
+          <p style="font-weight: bold">{{ sunset }}</p>
+        </div>
+        <div>
+          <p>Humidity</p>
+          <p style="font-weight: bold">{{ humidity }}%</p>
+        </div>
+        <div>
+          <p>Wind speed</p>
+          <p style="font-weight: bold">{{ wind_Speed }}m/s</p>
+        </div>
       </div>
     </div>
   </div>
@@ -85,7 +91,9 @@ onMounted(async () => {
 .weather_desc {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 55px;
+  margin: 1rem;
 }
 .weather_desc_innerdiv {
   display: flex;

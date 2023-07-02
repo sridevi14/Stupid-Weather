@@ -4,17 +4,17 @@
       <div id="today_forecast">
         <img id="forecast_climate" :src="state.img[0]" />
         <h2>Today:{{ state.today[0].weather[0].main }}</h2>
-        <h2>&nbsp;33°C/21°C</h2>
+        <h2>&nbsp;{{ today_temp_min }}/{{ today_temp_max }}</h2>
       </div>
       <div id="tomorrow_forecast">
         <img id="forecast_climate" :src="state.img[1]" />
         <h2>Tomorrow:{{ state.tomorrow[0].weather[0].main }}</h2>
-        <h2>&nbsp;33°C/21°C</h2>
+        <h2>&nbsp;{{ tomorrow_temp_min }}/{{ tomorrow_temp_max }}</h2>
       </div>
       <div id="nextday_forecast">
         <img id="forecast_climate" :src="state.img[2]" />
         <h2>{{ thirdday }}:{{ state.nextday[0].weather[0].main }}</h2>
-        <h2>&nbsp;33°C/21°C</h2>
+        <h2>&nbsp;{{ nextday_temp_min }}/{{ nextday_temp_max }}</h2>
       </div>
     </div>
     <div class="days_forecast_btn">
@@ -29,6 +29,12 @@ import WeatherDesc from "./WeatherDesc.vue";
 //image ref
 const isforecast = ref(false);
 const name = "src/assets/icons/";
+const today_temp_min = ref("");
+const today_temp_max = ref("");
+const tomorrow_temp_min = ref("");
+const tomorrow_temp_max = ref("");
+const nextday_temp_min = ref("");
+const nextday_temp_max = ref("");
 const image = ref(``);
 const thirdday = ref("");
 const props = defineProps({
@@ -93,6 +99,27 @@ onMounted(async () => {
   state.img.push(`${name}${state.today[0].weather[0].icon}.png`);
   state.img.push(`${name}${state.tomorrow[0].weather[0].icon}.png`);
   state.img.push(`${name}${state.nextday[0].weather[0].icon}.png`);
+  console.log(state.today);
+  today_temp_min.value = `${Math.floor(
+    state.today[0].main.temp_min - 273.15
+  ).toString()}°C`;
+  today_temp_max.value = `${Math.round(
+    state.today[0].main.temp_max - 273.15
+  ).toString()}°C`;
+
+  tomorrow_temp_min.value = `${Math.floor(
+    state.tomorrow[0].main.temp_min - 273.15
+  ).toString()}°C`;
+  tomorrow_temp_max.value = `${Math.round(
+    state.tomorrow[0].main.temp_max - 273.15
+  ).toString()}°C`;
+
+  nextday_temp_min.value = `${Math.floor(
+    state.nextday[0].main.temp_min - 273.15
+  ).toString()}°C`;
+  nextday_temp_max.value = `${Math.round(
+    state.nextday[0].main.temp_max - 273.15
+  ).toString()}°C`;
 });
 </script>
 
