@@ -11,7 +11,9 @@
         /><font-awesome-icon icon="fas fa-search" style="color: white" />
         <div class="search_result" style="position: absolute">
           <div class="option" v-for="result in state.countries">
-            <p @click="assignValue(result)">{{ result.city }}</p>
+            <p @click="assignValue(result)">
+              {{ result.city }}, {{ result.countryCode }}
+            </p>
           </div>
         </div>
       </div>
@@ -22,25 +24,25 @@
         </p>
       </div>
       <div>
-        <h2>18°C<span style="font-size: 18px">feels like 12°C</span></h2>
+        <h2>
+          <span id="temp">18°C</span
+          ><span style="font-size: 18px" id="feelsLike">feels like 12°C</span>
+        </h2>
         <div>
-          <img class="climate" src="../assets/icons/01d.png" />
+          <img id="climate" :src="image" />
         </div>
-        <div
-          class="d-inline-flex p-3 flex-column details mt-4"
-
-        >
+        <div class="d-inline-flex p-3 flex-column details mt-4">
           <div class="Wind">
             <span>Wind &nbsp; </span>
-            <span>2m/s</span>
+            <span id="wind_value">2m/s</span>
           </div>
           <div class="Humidity">
             <span>Humidity &nbsp;</span>
-            <span>15%</span>
+            <span id="humidity_value">15%</span>
           </div>
           <div class="Pressure">
             <span>Pressure&nbsp; </span>
-            <span>2 hpa</span>
+            <span id="pressure_value">2 hpa</span>
           </div>
         </div>
       </div>
@@ -49,19 +51,23 @@
     <div class="part2 d-flex flex-column flex-wrap">
       <div class="title">
         <h6>World <br />Weather</h6>
-        <div class="description mt-5">
+        <div class="mt-5">
           <div class="">
             <label style="font-size: 10px">Weather Forecast</label>
-            <h1>Sunny</h1>
+            <h1 id="description" style="text-transform: capitalize">Sunny</h1>
           </div>
         </div>
       </div>
+      <!-- <ForecastVue :forecast="state.forecast" v-if="Is_forecast" /> -->
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-
+import { reactive, ref, onMounted } from "vue";
+import ForecastVue from "./Forecast.vue";
+const name = "src/assets/icons/";
+const imageName = "01d.png";
+const image = ref(`${name}${imageName}`);
 interface countries {
   city: string;
   latitude: number;
@@ -69,8 +75,13 @@ interface countries {
   countryCode: string;
   country: string;
 }
+interface forecast {
+  forecast: any;
+}
+const Is_forecast = ref(false);
 const state = reactive({
   countries: [] as countries[],
+  forecast: [] as forecast[],
 });
 
 const searchTerm = ref("");
@@ -79,7 +90,7 @@ const fetchResults = async () => {
     state.countries = [] as countries[];
   } else {
     const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${searchTerm.value}`;
-    console.log(searchTerm.value);
+    //console.log(searchTerm.value);
     const options = {
       method: "GET",
       headers: {
@@ -108,14 +119,54 @@ const fetchResults = async () => {
 };
 
 const assignValue = async (result: any) => {
-  const apikey='98ed8b3f996c6fcea612fdd9e42f7e2f'
-  console.log(state.countries);
-  console.log(result);
+  const apikey = "98ed8b3f996c6fcea612fdd9e42f7e2f";
+  // console.log(state.countries);
+  // console.log(result);
   searchTerm.value = result.city;
   state.countries = [] as countries[];
-  const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${result.latitude}&lon=${result.longitude}&appid=${apikey}`);
-console.log(res);
+  const res = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${result.latitude}&lon=${result.longitude}&appid=${apikey}`
+  );
+  const forecast = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${result.latitude}&lon=${result.longitude}&appid=${apikey}`
+  );
+  //console.log(forecast);
+  const responose = await res.json();
+  const forecast_res = await forecast.json();
+  state.forecast = forecast_res.list;
+  Is_forecast.value = true;
+  image.value = `${name}${responose.weather[0].icon}.png`;
+  const description = document.getElementById("description");
+  description
+    ? (description.innerHTML = responose.weather[0].description)
+    : null;
+  const feelsLike = document.getElementById("feelsLike");
+  feelsLike
+    ? (feelsLike.innerHTML = `Feels like ${Math.round(
+        responose.main.feels_like - 273.15
+      ).toString()}°C`)
+    : null;
+  const temp = document.getElementById("temp");
+  temp
+    ? (temp.innerHTML = `${Math.round(
+        responose.main.feels_like - 273.15
+      ).toString()}°C`)
+    : null;
+  const humidity_value = document.getElementById("humidity_value");
+  humidity_value
+    ? (humidity_value.innerHTML = `${responose.main.humidity}%`)
+    : null;
+  const pressure_value = document.getElementById("pressure_value");
+  pressure_value
+    ? (pressure_value.innerHTML = `${responose.main.pressure}hpa`)
+    : null;
+  const wind_value = document.getElementById("wind_value");
+  wind_value ? (wind_value.innerHTML = `${responose.wind.speed}m/s`) : null;
 };
+
+onMounted(() => {
+  //console.log(image.value);
+});
 </script>
 
 <style scoped>
@@ -127,11 +178,11 @@ body {
   border-radius: 1rem;
   background-color: #777474;
   box-shadow: 10px -2px 20px 2px rgb(0 0 0 / 30%);
-  align-items:start;
+  align-items: start;
   transition: all 0.5s ease-in-out;
 }
 
-.details:hover{
+.details:hover {
   transform: translateX(-6px);
 }
 .input-search {
@@ -213,8 +264,6 @@ body {
   color: white;
 }
 
-.part2 .title {
-}
 .glass_effect {
   min-height: 80vh;
   background: linear-gradient(

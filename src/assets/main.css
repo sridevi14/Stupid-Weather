@@ -1,2 +1,92 @@
-@import './base.css';
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: monospace;
+}
 
+.container {
+  background: url(christian-holzinger-ikr2SffXZrA-unsplash.jpg);
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  z-index: -2;
+}
+
+.cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url(cloud.png);
+  width: 100%;
+  height: 100%;
+  animation: animate 360s linear infinite;
+  z-index: -1;
+}
+
+@keyframes animate {
+  0% {
+    background-position: 0px;
+  }
+
+  100% {
+    background-position: 5440px;
+  }
+}
+.rain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  height: 100%;
+  background-image: url(rain.png);
+  animation: rain 0.3s linear infinite;
+}
+@keyframes rain {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 20% 100%;
+  }
+}
+.rain::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url(lightining.png);
+  top: -100px;
+  transform: rotate(180deg);
+  animation: lightining 4s linear infinite;
+  opacity: 1;
+}
+@keyframes lightining {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  21% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  31% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
